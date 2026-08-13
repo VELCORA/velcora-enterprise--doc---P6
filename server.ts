@@ -263,7 +263,7 @@ Strictly output raw JSON. All numbers must be numeric values without currency sy
     if (process.env.GEMINI_API_KEY) {
       try {
         const response = await ai.models.generateContent({
-          model: 'gemini-3.6-flash',
+          model: 'gemini-2.5-flash',
           contents: contents.length === 1 ? contents[0].text : { parts: contents },
           config: {
             systemInstruction: systemPrompt,

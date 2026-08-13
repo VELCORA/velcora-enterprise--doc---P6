@@ -689,7 +689,7 @@ export const StructuredDataViewer: React.FC<StructuredDataViewerProps> = ({
                       <span>Dispatch Payload to Enterprise ERP Webhook</span>
                     </h3>
                     <p className="text-xs text-zinc-400 mt-0.5">
-                      Triggers real HTTP POST call with validated JSON schema.
+                      Simulated dispatch — no external system is contacted in this demo.
                     </p>
                   </div>
 

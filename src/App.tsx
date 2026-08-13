@@ -4,7 +4,7 @@ import { DocumentUploader } from './components/DocumentUploader';
 import { ExtractionProgress } from './components/ExtractionProgress';
 import { StructuredDataViewer } from './components/StructuredDataViewer';
 import { AutomationDashboard } from './components/AutomationDashboard';
-import { ExtractedDocumentData, DocumentType, WebhookLog } from './types';
+import { ExtractedDocumentData, DocumentType, WebhookLog, SampleDocumentTemplate } from './types';
 
 export function App() {
   const [activeTab, setActiveTab] = useState<'intake' | 'extraction' | 'structured' | 'dashboard'>('intake');
@@ -60,6 +60,20 @@ export function App() {
       setActiveTab('intake');
       alert('Error during document processing. Please try again.');
     }
+  };
+
+  // Load a pre-parsed sample directly (works with no API key)
+  const handleLoadSample = (sample: SampleDocumentTemplate) => {
+    setIsProcessing(true);
+    setActiveTab('extraction');
+    setActiveFileName(sample.fileName || sample.title);
+    setActiveTextContent(sample.sampleText);
+    setActiveFileData(undefined);
+    window.setTimeout(() => {
+      setExtractedData(sample.preExtractedData);
+      setIsProcessing(false);
+      setActiveTab('structured');
+    }, 1200);
   };
 
   // Dispatch Webhook Simulation
@@ -129,6 +143,7 @@ export function App() {
           <DocumentUploader
             onProcessDocument={handleProcessDocument}
             isProcessing={isProcessing}
+            onLoadSample={handleLoadSample}
           />
         )}
 
