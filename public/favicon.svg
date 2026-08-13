@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <rect width="200" height="200" rx="44" fill="#4f46e5"/>
+  <g fill="#ffffff">
+    <path d="M 52 80 L 76 18 L 100 80 Z"/>
+    <path d="M 128 32 L 140 80" stroke="#ffffff" stroke-width="16" stroke-linecap="round" fill="none"/>
+    <circle cx="122" cy="18" r="10"/>
+    <path d="M 38 88 C 38 48, 162 48, 162 88 C 162 108, 148 116, 136 116 L 64 116 C 52 116, 38 108, 38 88 Z"/>
+    <path d="M 38 126 C 38 178, 162 178, 162 126 C 162 118, 148 120, 136 120 L 64 120 C 52 120, 38 118, 38 126 Z"/>
+    <path d="M 152 148 C 188 148, 192 188, 164 188 C 148 188, 142 174, 154 164" stroke="#ffffff" stroke-width="14" stroke-linecap="round" fill="none"/>
+  </g>
+  <ellipse cx="76" cy="82" rx="7" ry="10" fill="#4f46e5"/>
+  <ellipse cx="124" cy="82" rx="7" ry="10" fill="#4f46e5"/>
+  <path d="M 32 116 L 42 122 L 52 116 L 62 122 L 72 116 L 82 122 L 92 116 L 102 122 L 112 116 L 122 122 L 132 116 L 142 122 L 152 116 L 168 122 L 168 110 L 32 110 Z" fill="#4f46e5"/>
+  <text x="100" y="118" fill="#ffffff" font-size="13" font-weight="900" font-family="monospace" text-anchor="middle" letter-spacing="1">- velcora -</text>
+</svg>

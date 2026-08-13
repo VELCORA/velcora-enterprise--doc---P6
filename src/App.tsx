@@ -5,6 +5,7 @@ import { ExtractionProgress } from './components/ExtractionProgress';
 import { StructuredDataViewer } from './components/StructuredDataViewer';
 import { AutomationDashboard } from './components/AutomationDashboard';
 import { ExtractedDocumentData, DocumentType, WebhookLog, SampleDocumentTemplate } from './types';
+import { VelcoraLogo } from './components/VelcoraLogo';
 
 export function App() {
   const [activeTab, setActiveTab] = useState<'intake' | 'extraction' | 'structured' | 'dashboard'>('intake');
@@ -171,7 +172,8 @@ export function App() {
       {/* Footer */}
       <footer className="border-t border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 py-4 px-6 mt-12">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-xs font-mono text-zinc-500">
-          <div>
+          <div className="flex items-center gap-2">
+            <VelcoraLogo size="sm" showText={false} />
             <span>VELCORA ENTERPRISE DOCUMENT INTELLIGENCE • SYSTEM v4.2</span>
           </div>
           <div className="flex items-center gap-4">

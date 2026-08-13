@@ -5,6 +5,7 @@ import {
   DocumentAnomaly,
   DocumentType,
 } from '../types';
+import { VelcoraLogo } from './VelcoraLogo';
 import {
   CheckCircle2,
   AlertTriangle,
@@ -288,9 +289,12 @@ export const StructuredDataViewer: React.FC<StructuredDataViewerProps> = ({
           <div className="flex-1 overflow-auto bg-zinc-100 dark:bg-zinc-950 p-4 rounded-lg border border-zinc-200 dark:border-zinc-800">
             <div
               style={{ transform: `scale(${zoomLevel / 100})`, transformOrigin: 'top left' }}
-              className="bg-white text-zinc-900 p-6 rounded shadow-md border border-zinc-300 font-mono text-xs leading-relaxed space-y-4 transition-all"
+              className="bg-white text-zinc-900 p-6 rounded shadow-md border border-zinc-300 font-mono text-xs leading-relaxed space-y-4 transition-all relative overflow-hidden"
             >
               {/* Image Preview if Base64 Image */}
+              <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-[0.04]">
+                <VelcoraLogo size="xl" showText={false} />
+              </div>
               {fileData && fileData.startsWith('data:image') ? (
                 <div className="relative group">
                   <img src={fileData} alt="Scanned Document" className="w-full h-auto rounded border border-zinc-300" />

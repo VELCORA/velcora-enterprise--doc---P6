@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Scan, Binary, Table, ShieldAlert, Zap, CheckCircle2 } from 'lucide-react';
+import { VelcoraLogo } from './VelcoraLogo';
 
 interface ExtractionProgressProps {
   fileName?: string;
@@ -48,13 +49,16 @@ export const ExtractionProgress: React.FC<ExtractionProgressProps> = ({ fileName
       <div className="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-6 shadow-sm">
         {/* Header */}
         <div className="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-800 pb-4 mb-6">
-          <div>
-            <h2 className="text-lg font-extrabold text-zinc-900 dark:text-white font-mono uppercase tracking-wider">
-              Document Processing Pipeline
-            </h2>
-            <p className="text-xs text-zinc-500 font-mono mt-0.5">
-              Target: <span className="text-zinc-800 dark:text-zinc-200 font-semibold">{fileName}</span>
-            </p>
+          <div className="flex items-center gap-3">
+            <VelcoraLogo size="sm" showText={false} />
+            <div>
+              <h2 className="text-lg font-extrabold text-zinc-900 dark:text-white font-mono uppercase tracking-wider">
+                Document Processing Pipeline
+              </h2>
+              <p className="text-xs text-zinc-500 font-mono mt-0.5">
+                Target: <span className="text-zinc-800 dark:text-zinc-200 font-semibold">{fileName}</span>
+              </p>
+            </div>
           </div>
           <div className="flex items-center gap-2 px-3 py-1 rounded bg-blue-50 dark:bg-blue-950/50 border border-blue-200 dark:border-blue-900/50 text-blue-600 dark:text-blue-400 text-xs font-mono font-bold">
             <span className="w-2 h-2 rounded-full bg-blue-500 animate-ping"></span>

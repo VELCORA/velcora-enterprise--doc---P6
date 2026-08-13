@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { DocumentType, SampleDocumentTemplate } from '../types';
 import { SAMPLE_DOCUMENTS } from '../data/sampleDocuments';
+import { VelcoraLogo } from './VelcoraLogo';
 
 interface DocumentUploaderProps {
   onProcessDocument: (payload: {
@@ -143,6 +144,14 @@ Late payments subject to 1.5% late fee per month.`;
 
   return (
     <div className="max-w-5xl mx-auto py-8 px-4 sm:px-6">
+      {/* Brand hero */}
+      <div className="flex flex-col items-center text-center mb-8">
+        <VelcoraLogo size="xl" showText />
+        <p className="mt-3 text-sm text-zinc-500 dark:text-zinc-400 max-w-xl">
+          AI-powered document intelligence — extract, audit, and automate enterprise financial paperwork in seconds.
+        </p>
+      </div>
+
       {/* Header Banner */}
       <div className="mb-8 text-center sm:text-left border-b border-zinc-200 dark:border-zinc-800 pb-6">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 text-xs font-mono font-semibold mb-3">
