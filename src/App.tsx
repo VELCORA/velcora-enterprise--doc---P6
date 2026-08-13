@@ -1,0 +1,175 @@
+import React, { useState } from 'react';
+import { Navbar } from './components/Navbar';
+import { DocumentUploader } from './components/DocumentUploader';
+import { ExtractionProgress } from './components/ExtractionProgress';
+import { StructuredDataViewer } from './components/StructuredDataViewer';
+import { AutomationDashboard } from './components/AutomationDashboard';
+import { ExtractedDocumentData, DocumentType, WebhookLog } from './types';
+
+export function App() {
+  const [activeTab, setActiveTab] = useState<'intake' | 'extraction' | 'structured' | 'dashboard'>('intake');
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [extractedData, setExtractedData] = useState<ExtractedDocumentData | null>(null);
+  const [activeFileName, setActiveFileName] = useState('Document');
+  const [activeFileData, setActiveFileData] = useState<string | undefined>(undefined);
+  const [activeTextContent, setActiveTextContent] = useState<string | undefined>(undefined);
+
+  const [webhookLogs, setWebhookLogs] = useState<WebhookLog[]>([]);
+  const [webhookStatus, setWebhookStatus] = useState<{
+    success: boolean;
+    targetSystem: string;
+    message: string;
+    timestamp: string;
+  } | null>(null);
+
+  // Handle Process Document
+  const handleProcessDocument = async (payload: {
+    fileData?: string;
+    mimeType?: string;
+    textContent?: string;
+    fileName: string;
+    documentCategory: DocumentType;
+  }) => {
+    setIsProcessing(true);
+    setActiveTab('extraction');
+    setActiveFileName(payload.fileName);
+    setActiveFileData(payload.fileData);
+    setActiveTextContent(payload.textContent);
+
+    try {
+      const response = await fetch('/api/extract-document', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      const resData = await response.json();
+
+      if (resData.success && resData.data) {
+        setExtractedData(resData.data);
+        setTimeout(() => {
+          setIsProcessing(false);
+          setActiveTab('structured');
+        }, 1200);
+      } else {
+        throw new Error(resData.error || 'Failed to extract document');
+      }
+    } catch (err) {
+      console.error('Extraction error:', err);
+      setIsProcessing(false);
+      setActiveTab('intake');
+      alert('Error during document processing. Please try again.');
+    }
+  };
+
+  // Dispatch Webhook Simulation
+  const handleDispatchWebhook = async (targetSystem: string) => {
+    if (!extractedData) return;
+
+    try {
+      const response = await fetch('/api/webhook/simulate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          targetSystem,
+          documentId: extractedData.financials.invoiceNumber || 'DOC-CURRENT',
+          payload: extractedData,
+          ruleName: 'Auto-Post Structured Payload',
+        }),
+      });
+
+      const resJson = await response.json();
+
+      if (resJson.success) {
+        const log: WebhookLog = {
+          id: resJson.executionId,
+          timestamp: new Date().toLocaleTimeString(),
+          documentId: resJson.documentId,
+          targetSystem: resJson.targetSystem,
+          payload: extractedData,
+          statusCode: 200,
+          responseMessage: resJson.message,
+        };
+
+        setWebhookLogs((prev) => [log, ...prev]);
+        setWebhookStatus({
+          success: true,
+          targetSystem: resJson.targetSystem,
+          message: resJson.message,
+          timestamp: new Date().toLocaleTimeString(),
+        });
+      }
+    } catch (err) {
+      console.error('Webhook dispatch error:', err);
+    }
+  };
+
+  const handleNewDocument = () => {
+    setExtractedData(null);
+    setActiveFileData(undefined);
+    setActiveTextContent(undefined);
+    setWebhookStatus(null);
+    setActiveTab('intake');
+  };
+
+  return (
+    <div className="min-h-screen bg-[#f8fafc] dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 flex flex-col font-sans selection:bg-blue-500 selection:text-white">
+      {/* Top Navbar */}
+      <Navbar
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        hasExtractedData={!!extractedData}
+        onNewDocument={handleNewDocument}
+        documentCount={extractedData ? 1 : 0}
+      />
+
+      {/* Main Content Area */}
+      <main className="flex-1">
+        {activeTab === 'intake' && (
+          <DocumentUploader
+            onProcessDocument={handleProcessDocument}
+            isProcessing={isProcessing}
+          />
+        )}
+
+        {activeTab === 'extraction' && (
+          <ExtractionProgress fileName={activeFileName} />
+        )}
+
+        {activeTab === 'structured' && extractedData && (
+          <StructuredDataViewer
+            data={extractedData}
+            onUpdateData={setExtractedData}
+            fileName={activeFileName}
+            fileData={activeFileData}
+            rawTextExcerpt={activeTextContent}
+            onDispatchWebhook={handleDispatchWebhook}
+            webhookStatus={webhookStatus}
+          />
+        )}
+
+        {activeTab === 'dashboard' && (
+          <AutomationDashboard webhookLogs={webhookLogs} />
+        )}
+      </main>
+
+      {/* Footer */}
+      <footer className="border-t border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 py-4 px-6 mt-12">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-xs font-mono text-zinc-500">
+          <div>
+            <span>VELCORA ENTERPRISE DOCUMENT INTELLIGENCE • SYSTEM v4.2</span>
+          </div>
+          <div className="flex items-center gap-4">
+            <span className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-bold">
+              <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+              SLA SLA: Active (3000ms)
+            </span>
+            <span>REST API Ready</span>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}
+
+export default App;

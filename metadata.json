@@ -1,0 +1,6 @@
+{
+  "name": "Velcora Enterprise Document Processing & Automation Workbench",
+  "description": "Enterprise-grade document extraction, structured entity verification, mathematical subtotal reconciliation, risk auditing, and automated ERP webhook dispatch.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
