@@ -22,6 +22,7 @@ export function App() {
     message: string;
     timestamp: string;
   } | null>(null);
+  const [processError, setProcessError] = useState<string | null>(null);
 
   // Handle Process Document
   const handleProcessDocument = async (payload: {
@@ -32,6 +33,7 @@ export function App() {
     documentCategory: DocumentType;
   }) => {
     setIsProcessing(true);
+    setProcessError(null);
     setActiveTab('extraction');
     setActiveFileName(payload.fileName);
     setActiveFileData(payload.fileData);
@@ -59,13 +61,16 @@ export function App() {
       console.error('Extraction error:', err);
       setIsProcessing(false);
       setActiveTab('intake');
-      alert('Error during document processing. Please try again.');
+      setProcessError(
+        'Document processing failed. The extraction service may be temporarily unavailable — please try again shortly.'
+      );
     }
   };
 
   // Load a pre-parsed sample directly (works with no API key)
   const handleLoadSample = (sample: SampleDocumentTemplate) => {
     setIsProcessing(true);
+    setProcessError(null);
     setActiveTab('extraction');
     setActiveFileName(sample.fileName || sample.title);
     setActiveTextContent(sample.sampleText);
@@ -124,6 +129,7 @@ export function App() {
     setActiveFileData(undefined);
     setActiveTextContent(undefined);
     setWebhookStatus(null);
+    setProcessError(null);
     setActiveTab('intake');
   };
 
@@ -141,11 +147,29 @@ export function App() {
       {/* Main Content Area */}
       <main className="flex-1">
         {activeTab === 'intake' && (
-          <DocumentUploader
-            onProcessDocument={handleProcessDocument}
-            isProcessing={isProcessing}
-            onLoadSample={handleLoadSample}
-          />
+          <>
+            {processError && (
+              <div className="max-w-3xl mx-auto mt-6 px-4">
+                <div className="flex items-start gap-3 rounded-lg border border-red-300 bg-red-50 dark:bg-red-950/40 dark:border-red-800 p-4 text-sm text-red-700 dark:text-red-300">
+                  <span className="font-semibold">Processing error</span>
+                  <span className="flex-1">{processError}</span>
+                  <button
+                    type="button"
+                    onClick={() => setProcessError(null)}
+                    className="text-red-500 hover:text-red-700 dark:hover:text-red-200 font-medium"
+                    aria-label="Dismiss error"
+                  >
+                    Dismiss
+                  </button>
+                </div>
+              </div>
+            )}
+            <DocumentUploader
+              onProcessDocument={handleProcessDocument}
+              isProcessing={isProcessing}
+              onLoadSample={handleLoadSample}
+            />
+          </>
         )}
 
         {activeTab === 'extraction' && (
@@ -179,7 +203,7 @@ export function App() {
           <div className="flex items-center gap-4">
             <span className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-bold">
               <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
-              SLA SLA: Active (3000ms)
+               SLA: Active (99.9% Uptime)
             </span>
             <span>REST API Ready</span>
           </div>
