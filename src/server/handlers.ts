@@ -1,5 +1,15 @@
 import { GoogleGenAI } from '@google/genai';
 
+// Env-agnostic JSON responder (works on both Express and Vercel Node runtime,
+// where res.json() / res.status() are NOT provided).
+function sendJson(res: any, status: number, obj: any) {
+  res.statusCode = status;
+  if (typeof res.setHeader === 'function') {
+    res.setHeader('Content-Type', 'application/json');
+  }
+  res.end(JSON.stringify(obj));
+}
+
 // Lazy init Gemini AI client
 let aiClient: GoogleGenAI | null = null;
 export function getGeminiClient(): GoogleGenAI {
@@ -22,7 +32,7 @@ export function getGeminiClient(): GoogleGenAI {
 
 // Health check endpoint
 export function handleHealth(_req: any, res: any) {
-  res.json({
+  sendJson(res, 200, {
     status: 'healthy',
     service: 'Velcora Enterprise Document Processing & Workflow Automation System',
     timestamp: new Date().toISOString(),
@@ -159,7 +169,7 @@ export async function handleExtractDocument(req: any, res: any) {
     const { fileData, mimeType, textContent, fileName, documentCategory } = req.body || {};
 
     if (!fileData && !textContent) {
-      return res.status(400).json({ error: 'Document data (file base64 or text content) is required.' });
+      return sendJson(res, 400, { error: 'Document data (file base64 or text content) is required.' });
     }
 
     const ai = getGeminiClient();
@@ -386,14 +396,14 @@ Strictly output raw JSON. All numbers must be numeric values without currency sy
     const processingTimeMs = Date.now() - startTime;
     sanitizedData.processingTimeMs = processingTimeMs;
 
-    return res.json({
+    return sendJson(res, 200, {
       success: true,
       data: sanitizedData,
       processingTimeMs,
     });
   } catch (err: any) {
     console.error('Error in document extraction API:', err);
-    return res.status(500).json({
+    return sendJson(res, 500, {
       success: false,
       error: 'Failed to process document: ' + (err.message || String(err)),
     });
@@ -422,5 +432,5 @@ export function handleWebhookSimulate(req: any, res: any) {
     },
   };
 
-  return res.json(mockResponse);
+  return sendJson(res, 200, mockResponse);
 }
