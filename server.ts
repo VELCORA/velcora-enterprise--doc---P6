@@ -4,7 +4,7 @@ import path from 'path';
 import { createServer as createViteServer } from 'vite';
 import { handleHealth } from './api/health';
 import { handleExtractDocument } from './api/extract-document';
-import { handleWebhookSimulate } from './api/webhook-simulate';
+import { handleWebhookSimulate } from './api/webhook/simulate';
 
 const app = express();
 const PORT = 3000;
