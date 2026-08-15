@@ -11,5 +11,9 @@ export default function handler(req: any, res: any) {
     sendJson(res, 405, { error: 'Method not allowed' });
     return;
   }
-  handleWebhookSimulate(req, res);
+  try {
+    handleWebhookSimulate(req, res);
+  } catch (e: any) {
+    sendJson(res, 500, { error: String(e && e.stack ? e.stack : e) });
+  }
 }

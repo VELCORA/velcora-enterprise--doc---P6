@@ -11,5 +11,9 @@ export default async function handler(req: any, res: any) {
     sendJson(res, 405, { error: 'Method not allowed' });
     return;
   }
-  await handleExtractDocument(req, res);
+  try {
+    await handleExtractDocument(req, res);
+  } catch (e: any) {
+    sendJson(res, 500, { error: String(e && e.stack ? e.stack : e) });
+  }
 }
