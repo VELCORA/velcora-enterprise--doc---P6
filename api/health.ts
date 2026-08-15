@@ -1,5 +1,3 @@
-import { handleHealth } from '../src/server/handlers';
-
 function sendJson(res: any, status: number, obj: any) {
   res.statusCode = status;
   if (typeof res.setHeader === 'function') res.setHeader('Content-Type', 'application/json');
@@ -11,9 +9,11 @@ export default function handler(req: any, res: any) {
     sendJson(res, 405, { error: 'Method not allowed' });
     return;
   }
-  try {
-    handleHealth(req, res);
-  } catch (e: any) {
-    sendJson(res, 500, { error: String(e && e.stack ? e.stack : e) });
-  }
+  sendJson(res, 200, {
+    status: 'healthy',
+    service: 'Velcora Enterprise Document Processing & Workflow Automation System',
+    timestamp: new Date().toISOString(),
+    version: '4.2.0-enterprise',
+    engine: process.env.GEMINI_API_KEY ? 'gemini-2.5-flash' : 'deterministic-fallback',
+  });
 }
