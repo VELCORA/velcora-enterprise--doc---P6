@@ -206,6 +206,8 @@ export function App() {
                SLA: Active (99.9% Uptime)
             </span>
             <span>REST API Ready</span>
+            <a href="mailto:velcora.ai@gmail.com" className="hover:text-zinc-900 dark:hover:text-white transition-colors">velcora.ai@gmail.com</a>
+            <a href="tel:+919138278584" className="hover:text-zinc-900 dark:hover:text-white transition-colors">+919138278584</a>
           </div>
         </div>
       </footer>
