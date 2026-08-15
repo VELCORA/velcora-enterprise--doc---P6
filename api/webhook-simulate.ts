@@ -1,4 +1,4 @@
-import { handleWebhookSimulate } from '../src/server/handlers';
+import { handleWebhookSimulate } from './_lib/handlers';
 
 function sendJson(res: any, status: number, obj: any) {
   res.statusCode = status;

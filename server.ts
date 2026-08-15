@@ -2,7 +2,7 @@ import 'dotenv/config';
 import express from 'express';
 import path from 'path';
 import { createServer as createViteServer } from 'vite';
-import { handleHealth, handleExtractDocument, handleWebhookSimulate } from './src/server/handlers';
+import { handleHealth, handleExtractDocument, handleWebhookSimulate } from './api/_lib/handlers';
 
 const app = express();
 const PORT = 3000;
