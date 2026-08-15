@@ -1,5 +1,3 @@
-import { GoogleGenAI } from '@google/genai';
-
 // Env-agnostic JSON responder (works on both Express and Vercel Node runtime,
 // where res.json() / res.status() are NOT provided).
 function sendJson(res: any, status: number, obj: any) {
@@ -10,23 +8,26 @@ function sendJson(res: any, status: number, obj: any) {
   res.end(JSON.stringify(obj));
 }
 
-// Lazy init Gemini AI client
-let aiClient: GoogleGenAI | null = null;
-export function getGeminiClient(): GoogleGenAI {
-  if (!aiClient) {
-    const apiKey = process.env.GEMINI_API_KEY;
-    if (!apiKey) {
-      console.warn('Notice: GEMINI_API_KEY is not configured. Falling back to enterprise deterministic document parser.');
-    }
-    aiClient = new GoogleGenAI({
-      apiKey: apiKey || 'dummy-key',
-      httpOptions: {
-        headers: {
-          'User-Agent': 'velcora-document-engine',
-        },
-      },
-    });
+// Lazy init Gemini AI client (dynamically imported so the package is only
+// loaded when a real API key is configured — keeps health/webhook light and
+// avoids module-load failures on serverless runtimes).
+let aiClient: any = null;
+export async function getGeminiClient(): Promise<any> {
+  if (aiClient) return aiClient;
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) {
+    console.warn('Notice: GEMINI_API_KEY is not configured. Falling back to enterprise deterministic document parser.');
+    return null;
   }
+  const { GoogleGenAI } = await import('@google/genai');
+  aiClient = new GoogleGenAI({
+    apiKey,
+    httpOptions: {
+      headers: {
+        'User-Agent': 'velcora-document-engine',
+      },
+    },
+  });
   return aiClient;
 }
 
@@ -172,7 +173,7 @@ export async function handleExtractDocument(req: any, res: any) {
       return sendJson(res, 400, { error: 'Document data (file base64 or text content) is required.' });
     }
 
-    const ai = getGeminiClient();
+    const ai = await getGeminiClient();
 
     const systemPrompt = `You are Velcora Enterprise Document AI, an enterprise-grade document extraction, OCR, and financial compliance system.
 Analyze the provided document (Invoice, Purchase Order, Contract, Receipt, Utility Bill, Tax Form, or Financial Statement) and extract complete, highly accurate structured JSON.
@@ -260,7 +261,7 @@ Strictly output raw JSON. All numbers must be numeric values without currency sy
 
     let parsedResult: any = null;
 
-    if (process.env.GEMINI_API_KEY) {
+    if (ai && process.env.GEMINI_API_KEY) {
       try {
         const response = await ai.models.generateContent({
           model: 'gemini-2.5-flash',
