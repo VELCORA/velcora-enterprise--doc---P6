@@ -354,7 +354,7 @@ Late payments subject to 1.5% late fee per month.`;
             <h4 className="text-xs font-bold text-zinc-900 dark:text-white uppercase font-mono">
               Line Item Recalculation
             </h4>
-            <p className="text-xs text-zinc-500 mt-1 leading-relaxed">
+            <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-1 leading-relaxed">
               Automatically verifies subtotal math and flags item price mismatches instantly.
             </p>
           </div>
@@ -368,7 +368,7 @@ Late payments subject to 1.5% late fee per month.`;
             <h4 className="text-xs font-bold text-zinc-900 dark:text-white uppercase font-mono">
               Compliance & Risk Auditing
             </h4>
-            <p className="text-xs text-zinc-500 mt-1 leading-relaxed">
+            <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-1 leading-relaxed">
               Detects duplicate billing, missing tax registration IDs, or non-standard payment terms.
             </p>
           </div>
@@ -382,34 +382,35 @@ Late payments subject to 1.5% late fee per month.`;
             <h4 className="text-xs font-bold text-zinc-900 dark:text-white uppercase font-mono">
               Direct ERP Webhook Dispatch
             </h4>
-            <p className="text-xs text-zinc-500 mt-1 leading-relaxed">
+            <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-1 leading-relaxed">
               Pushes verified JSON payloads directly to SAP, Workday, QuickBooks, or custom APIs.
             </p>
           </div>
         </div>
+      </div>
 
         {/* Sample Document Library */}
         <div className="mt-10 fade-in-up">
-          <div className="mb-4 flex items-center justify-between">
+          <div className="mb-4 flex items-center justify-between gap-3 flex-wrap">
             <h3 className="text-sm font-bold font-mono text-zinc-900 dark:text-white uppercase tracking-wider">
               Or load a sample document
             </h3>
-            <span className="text-xs text-zinc-500 font-mono">No upload needed — pre-parsed demo data</span>
+            <span className="text-xs text-zinc-500 dark:text-zinc-400 font-mono">No upload needed — pre-parsed demo data</span>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 auto-rows-fr">
             {SAMPLE_DOCUMENTS.map((s, i) => (
               <div
                 key={s.id}
                 style={{ animationDelay: `${i * 90}ms` }}
-                className="card-in bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-4 shadow-sm flex flex-col transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:border-indigo-300 dark:hover:border-indigo-700"
+                className="card-in min-w-0 bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-4 shadow-sm flex flex-col transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:border-indigo-300 dark:hover:border-indigo-700"
               >
                 <span className="self-start px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border border-zinc-300 dark:border-zinc-700">
                   {s.category}
                 </span>
-                <h4 className="mt-2 text-sm font-bold text-zinc-900 dark:text-white leading-snug">
+                <h4 className="mt-2 text-sm font-bold text-zinc-900 dark:text-white leading-snug break-words">
                   {s.title}
                 </h4>
-                <p className="mt-1 text-xs text-zinc-500 leading-relaxed flex-1">
+                <p className="mt-1 text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed flex-1 break-words">
                   {s.description}
                 </p>
                 <button
@@ -424,7 +425,6 @@ Late payments subject to 1.5% late fee per month.`;
             ))}
           </div>
         </div>
-      </div>
     </div>
   );
 };
