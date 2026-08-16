@@ -389,7 +389,7 @@ Late payments subject to 1.5% late fee per month.`;
         </div>
 
         {/* Sample Document Library */}
-        <div className="mt-10">
+        <div className="mt-10 fade-in-up">
           <div className="mb-4 flex items-center justify-between">
             <h3 className="text-sm font-bold font-mono text-zinc-900 dark:text-white uppercase tracking-wider">
               Or load a sample document
@@ -397,8 +397,12 @@ Late payments subject to 1.5% late fee per month.`;
             <span className="text-xs text-zinc-500 font-mono">No upload needed — pre-parsed demo data</span>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {SAMPLE_DOCUMENTS.map((s) => (
-              <div key={s.id} className="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-4 shadow-sm flex flex-col">
+            {SAMPLE_DOCUMENTS.map((s, i) => (
+              <div
+                key={s.id}
+                style={{ animationDelay: `${i * 90}ms` }}
+                className="card-in bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-4 shadow-sm flex flex-col transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:border-indigo-300 dark:hover:border-indigo-700"
+              >
                 <span className="self-start px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border border-zinc-300 dark:border-zinc-700">
                   {s.category}
                 </span>
@@ -411,7 +415,7 @@ Late payments subject to 1.5% late fee per month.`;
                 <button
                   type="button"
                   onClick={() => onLoadSample(s)}
-                  className="mt-3 flex items-center justify-center gap-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold py-2 rounded-lg transition-all"
+                  className="mt-3 flex items-center justify-center gap-1.5 bg-indigo-600 hover:bg-indigo-500 active:scale-[0.98] text-white text-xs font-bold py-2 rounded-lg transition-all"
                 >
                   <FileText className="w-3.5 h-3.5" />
                   Load Sample
